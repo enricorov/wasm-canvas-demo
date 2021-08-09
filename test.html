@@ -1,16 +1,29 @@
+const { PebblifyCard, PebblifyMenu } = require('./windows');
+
 <!DOCTYPE html>
 <html>
   <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+  </head>
+  <body>
+    
     <script type="module">
+                                                     
+      var col1 = 0xffff00ff
+      var col2 = 0xffffff00
+
       async function init() {
         const { instance } = await WebAssembly.instantiateStreaming(
-          fetch("./bare_metal_wasm.wasm")
+          fetch("./graphics.wasm")
         ); // here
 
         const width = 600;
         const height = 600;
 
-        const canvas = document.getElementById("demo-canvas");
+        const canvas = document.getElementById("canvas-sim");
         canvas.width = width;
         canvas.height = height;
 
@@ -26,15 +39,15 @@
 
         const ctx = canvas.getContext("2d");
 
-        instance.exports.go(); // here
+        instance.exports.refresh_buffer(col1, col2); // here
 
         ctx.putImageData(image, 0, 0);
       }
 
       init();
     </script>
-  </head>
-  <body>
-    <canvas id="demo-canvas"></canvas>
+    
+    <canvas id="canvas-sim"></canvas>
+    <script src="wasm_lib.js" charset="utf-8"></script>
   </body>
 </html>
